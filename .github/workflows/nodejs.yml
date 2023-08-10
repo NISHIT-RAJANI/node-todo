@@ -14,4 +14,4 @@ jobs:
         
     steps:
       - name: Run a Script
-        run: cd /home/ubuntu/actions-runner/scripts && bash main.sh
+        run: cd /home/ubuntu/actions-runner/scripts && bash main.sh -f
