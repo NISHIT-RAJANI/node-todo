@@ -21,7 +21,7 @@ jobs:
       - name: npm install and build
         run: |
           npm install
-          npm run build
+          npm run test
 
   depoly:
     needs: [build]
@@ -44,6 +44,6 @@ jobs:
                cd ~/node-todo
                git pull origin master
                npm install
-               npm run build
+               npm run test
                pm2 restart app
             
