@@ -26,8 +26,21 @@ jobs:
   depoly:
     needs: [build]
     runs-on: ubuntu-latest
-
+    
     steps:
+     - name: Setup SSH key
+       run: |
+         echo "-----BEGIN OPENSSH PRIVATE KEY-----
+               b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+               QyNTUxOQAAACAJlGtJBIQJiqusaNQrWNkCC5N9ZthchIcL7MAD0HWVqAAAAKDQRzZ50Ec2
+               eQAAAAtzc2gtZWQyNTUxOQAAACAJlGtJBIQJiqusaNQrWNkCC5N9ZthchIcL7MAD0HWVqA
+               AAAEC55VLRgjv4QjKYhJN9gCHgviMkhWcquLRfp021QINP6QmUa0kEhAmKq6xo1CtY2QIL
+               k31m2FyEhwvswAPQdZWoAAAAG25pc2hpdC5yYWphbmkxOTA3QGdtYWlsLmNvbQEC
+               -----END OPENSSH PRIVATE KEY-----" > key.pem
+         chmod 600 key.pem
+         eval $(ssh-agent)
+         ssh-add key.pem
+
      - name: SSH deploy
        uses: appleboy/ssh-action@master
        with:
