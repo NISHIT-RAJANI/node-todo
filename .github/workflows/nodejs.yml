@@ -13,6 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2  # This step checks out your repository code
       
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install ffmpeg -y
+      
       - name: Run a Script
         run: |
           cd /home/ubuntu/actions-runner/scripts
@@ -20,8 +25,7 @@ jobs:
           
       - name: Create Video Artifact
         run: |
-          # Add commands here to capture video of the running job, e.g., using ffmpeg
-          # For example, you can use the 'ffmpeg' command to capture the screen or specific windows
+          # Add the 'ffmpeg' command to capture the video here
           # Replace the following with your actual capture command
           ffmpeg -f x11grab -video_size 1920x1080 -framerate 30 -i :0.0 -t 10 output.mp4
 
