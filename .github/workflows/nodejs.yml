@@ -21,7 +21,7 @@ jobs:
       - name: Start Xvfb
         run: |
           # Start Xvfb with a virtual display at :99
-          Xvfb :99 -screen 0 1920x1080x24 &
+          Xvfb :99 -screen 0 1920x1080x16 &
           export DISPLAY=:99
       
       - name: Run a Script
