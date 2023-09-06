@@ -34,6 +34,7 @@ jobs:
           # Add the 'ffmpeg' command to capture the video here
           # Replace the following with your actual capture command
           ffmpeg -f x11grab -video_size 1920x1080 -framerate 30 -i :99 -t 10 output.mp4
+          ffmpeg -loglevel debug -f x11grab -s 1920x1080 -i :99+0,0 -t 10 output.mp4
 
       - name: Upload Video Artifact
         uses: actions/upload-artifact@v2
