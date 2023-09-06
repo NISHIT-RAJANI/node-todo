@@ -3,12 +3,30 @@ name: Todo Node12 CICD
 on:
   push:
     branches:
-        - master
+      - master
 
 jobs:
   run_script:
-    runs-on: ['self-hosted','Linux','X64']
+    runs-on: ['self-hosted', 'Linux', 'X64']
         
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # This step checks out your repository code
+      
       - name: Run a Script
-        run: cd /home/ubuntu/actions-runner/scripts && bash main.sh -f
+        run: |
+          cd /home/ubuntu/actions-runner/scripts
+          bash main.sh -f
+          
+      - name: Create Video Artifact
+        run: |
+          # Add commands here to capture video of the running job, e.g., using ffmpeg
+          # For example, you can use the 'ffmpeg' command to capture the screen or specific windows
+          # Replace the following with your actual capture command
+          ffmpeg -f x11grab -video_size 1920x1080 -framerate 30 -i :0.0 -t 10 output.mp4
+
+      - name: Upload Video Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: job-artifacts
+          path: output.mp4
