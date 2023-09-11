@@ -19,7 +19,7 @@ jobs:
       - name: Start OBS Studio Recording
         run: |
           # Start OBS Studio with recording settings
-          obs --startrecording
+          /usr/bin/obs --startrecording
           sleep 10  # Adjust as needed to allow OBS to start recording
 
       - name: Run a Script
