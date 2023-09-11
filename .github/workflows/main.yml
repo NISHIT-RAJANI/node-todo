@@ -1,8 +1,10 @@
 name: Todo Node12 CICD
-'on':
+
+on:
   push:
     branches:
       - master
+
 jobs:
   run_script:
     runs-on:
@@ -12,14 +14,13 @@ jobs:
     steps:
       - name: Run a Script
         run: cd /home/ubuntu/actions-runner/scripts && bash main.sh -f
-      - name: Install screen recording software
-        uses: actions/setup-recording@v1
-      - name: Start screen recording
-        run: screenrec
-      - name: Stop screen recording
-        run: screenrec stop
-      - name: Upload screen recording
-        uses: actions/upload-artifact@v1
+
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cypress-io/github-action@v2
         with:
-         name: screenrecording
-         path: ./recording.mp4
+          record: true
+      - name: Run Cypress tests
+        run: npm run cypress
