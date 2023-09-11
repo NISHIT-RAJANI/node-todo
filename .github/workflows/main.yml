@@ -13,17 +13,20 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
-      - name: Run a Script
-        run: |
-          # Replace 'YOUR_COMMANDS_HERE' with your actual commands
-          cd /home/ubuntu/actions-runner/scripts && bash main.sh -f
-          
-          # Record job logs to a file
-          mkdir -p logs
-          exec &> logs/job.log
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
 
-      - name: Upload Job Logs
+      - name: Install Cypress
+        run: npm install cypress
+
+      - name: Run Cypress Tests
+        run: |
+          npx cypress run --spec "/home/ubuntu/cypress/integration/github_actions_spec.js"
+
+      - name: Upload Cypress Screenshots as Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: job-logs
-          path: logs/
+          name: cypress-screenshots
+          path: cypress/screenshots/
