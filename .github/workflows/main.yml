@@ -7,25 +7,39 @@ on:
 
 jobs:
   run_script:
-    runs-on: ubuntu-latest
-
+    runs-on:
+      - self-hosted
+      - Linux
+      - X64
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Install asciinema
         run: |
-          sudo apt-get update
-          sudo apt-get install asciinema
-          # You might need to adjust the installation command for non-Ubuntu systems.
+          # Install asciinema using your package manager
+          apt-get update && apt-get install -y asciinema
+        shell: bash
 
-      - name: Start Recording
-        run: asciinema rec recording.cast
+      - name: Start Screen Recording
+        run: |
+          # Start an asciinema recording session
+          asciinema rec recording.json
+        shell: bash
 
       - name: Run a Script
         run: |
-          cd /home/ubuntu/actions-runner/scripts
-          bash main.sh -f
+          cd /home/ubuntu/actions-runner/scripts && bash main.sh -f
+        shell: bash
 
-      - name: Stop Recording
-        run: asciinema upload recording.cast
+      - name: Stop Screen Recording
+        run: |
+          # Stop the asciinema recording session
+          exit
+        shell: bash
+
+      - name: Upload Screen Recording
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: recording.json
