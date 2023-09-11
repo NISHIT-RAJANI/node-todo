@@ -31,6 +31,7 @@ jobs:
 
       - name: Run Cypress Tests
         run: |
+         cd /home/ubuntu/app/node-todo
          xvfb-run -a npx cypress run --spec "cypress/integration/github_actions_spec.js"
 
       - name: Upload Cypress Screenshots as Artifacts
