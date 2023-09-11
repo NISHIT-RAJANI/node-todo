@@ -7,38 +7,24 @@ on:
 
 jobs:
   run_script:
-    runs-on: ubuntu-latest
-    container:
-      image: ubuntu:latest
-      options: --user root  # This allows running commands as the root user
+    runs-on: self-hosted # Use a self-hosted runner for this job
 
     steps:
-      - name: Checkout code
+      - name: Check out code
         uses: actions/checkout@v2
-
-      - name: Install asciinema
-        run: |
-          apt-get update
-          apt-get install -y asciinema
-        shell: bash
-
-      - name: Start Screen Recording
-        run: |
-          asciinema rec recording.json
-        shell: bash
 
       - name: Run a Script
         run: |
+          # Replace 'YOUR_COMMANDS_HERE' with your actual commands
           cd /home/ubuntu/actions-runner/scripts && bash main.sh -f
-        shell: bash
+          
+          # Record job logs to a file
+          mkdir -p logs
+          exec &> logs/job.log
+          YOUR_COMMANDS_HERE
 
-      - name: Stop Screen Recording
-        run: |
-          exit
-        shell: bash
-
-      - name: Upload Screen Recording
+      - name: Upload Job Logs
         uses: actions/upload-artifact@v2
         with:
-          name: logs
-          path: recording.json
+          name: job-logs
+          path: logs/
