@@ -7,23 +7,23 @@ on:
 
 jobs:
   run_script:
-    runs-on:
-      - self-hosted
-      - Linux
-      - X64
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:latest
+      options: --user root  # This allows running commands as the root user
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Install asciinema
         run: |
-          # Install asciinema using your package manager
-          apt-get update && apt-get install -y asciinema
+          apt-get update
+          apt-get install -y asciinema
         shell: bash
 
       - name: Start Screen Recording
         run: |
-          # Start an asciinema recording session
           asciinema rec recording.json
         shell: bash
 
@@ -34,7 +34,6 @@ jobs:
 
       - name: Stop Screen Recording
         run: |
-          # Stop the asciinema recording session
           exit
         shell: bash
 
