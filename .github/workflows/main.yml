@@ -20,7 +20,7 @@ jobs:
         run: |
           export DISPLAY=:0
           # Start OBS Studio with recording settings
-          /usr/bin/obs --startrecording  > obs_log.txt 2>&1
+          /usr/share/man/man1/obs.1.gz --startrecording  > obs_log.txt 2>&1
           sleep 10  # Adjust as needed to allow OBS to start recording
 
       - name: Run a Script
