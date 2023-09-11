@@ -21,7 +21,6 @@ jobs:
           # Record job logs to a file
           mkdir -p logs
           exec &> logs/job.log
-          YOUR_COMMANDS_HERE
 
       - name: Upload Job Logs
         uses: actions/upload-artifact@v2
