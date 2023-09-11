@@ -6,37 +6,29 @@ on:
       - master
 
 jobs:
-  end-to-end-tests:
-    name: End-to-End tests (web)
-    runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
+  run_script:
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        os: [ubuntu-latest]  # Use the OS of your self-hosted runner
+
     steps:
-      ## Start Shared Setup
-      - name: checkout gather
+      - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: setup node
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: 12.22.9
+      - name: Start OBS Studio Recording
+        run: |
+          # Start OBS Studio with recording settings
+          obs --startrecording
+          sleep 10  # Adjust as needed to allow OBS to start recording
 
-      - uses: bahmutov/npm-install@HEAD
-      ## End Shared Setup
+      - name: Run a Script
+        run: |
+          cd /home/ubuntu/actions-runner/scripts
+          bash main.sh -f
 
-      - name: cypress in chrome
-        uses: cypress-io/github-action@v2
-        with:
-          browser: chrome
-          headless: true
-      - name: upload failure screenshots
-        uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
-      - name: upload failure videos
-        uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: cypress-videos
-          path: cypress/videos
+      - name: Stop OBS Studio Recording
+        run: |
+          # Stop OBS Studio recording
+          obs --stoprecording
+          sleep 10  # Adjust as needed to allow OBS to stop recording
