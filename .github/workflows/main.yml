@@ -7,29 +7,25 @@ on:
 
 jobs:
   run_script:
-    runs-on: self-hosted
-    strategy:
-      matrix:
-        os: [ubuntu-latest]  # Use the OS of your self-hosted runner
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Start OBS Studio Recording
+      - name: Install asciinema
         run: |
-          
-          # Start OBS Studio with recording settings
-          /usr/share/man/man1/obs.1.gz --startrecording  > obs_log.txt 2>&1
-          sleep 10  # Adjust as needed to allow OBS to start recording
+          sudo apt-get update
+          sudo apt-get install asciinema
+          # You might need to adjust the installation command for non-Ubuntu systems.
+
+      - name: Start Recording
+        run: asciinema rec recording.cast
 
       - name: Run a Script
         run: |
           cd /home/ubuntu/actions-runner/scripts
           bash main.sh -f
 
-      - name: Stop OBS Studio Recording
-        run: |
-          # Stop OBS Studio recording
-          obs --stoprecording
-          sleep 10  # Adjust as needed to allow OBS to stop recording
+      - name: Stop Recording
+        run: asciinema upload recording.cast
