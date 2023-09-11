@@ -30,7 +30,8 @@ jobs:
         run: npx cypress install
 
       - name: Run Cypress Tests
-        run: npx cypress run --spec "/home/ubuntu/cypress/integration/github_actions_spec.js"
+        run: |
+         xvfb-run -a npx cypress run --spec "cypress/integration/github_actions_spec.js"
 
       - name: Upload Cypress Screenshots as Artifacts
         uses: actions/upload-artifact@v2
