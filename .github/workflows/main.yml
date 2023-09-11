@@ -7,9 +7,14 @@ on:
 
 jobs:
   run_script:
-    runs-on: self-hosted # Use a self-hosted runner for this job
-
+    runs-on:
+      - self-hosted
+      - Linux
+      - X64
     steps:
+      - name: Run a Script
+        run: cd /home/ubuntu/actions-runner/scripts && bash main.sh -f
+
       - name: Check out code
         uses: actions/checkout@v2
 
@@ -18,13 +23,14 @@ jobs:
         with:
           node-version: 12
 
+      - name: Install Dependencies
+        run: npm install
+
       - name: Install Cypress
-        run: npm install cypress
+        run: npx cypress install
 
       - name: Run Cypress Tests
-        run: |
-         xvfb-run -a npx cypress run --spec "cypress/integration/github_actions_spec.js"
-
+        run: npx cypress run --spec "/home/ubuntu/cypress/integration/github_actions_spec.js"
 
       - name: Upload Cypress Screenshots as Artifacts
         uses: actions/upload-artifact@v2
