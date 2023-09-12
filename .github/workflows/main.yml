@@ -3,25 +3,23 @@ name: Todo Node12 CICD
 on:
   push:
     branches:
-        - master
+      - master
 
 jobs:
   run_script:
     runs-on: ['self-hosted','Linux','X64']
-        
+
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
       - name: Run a Script
         run: |
           cd /home/ubuntu/actions-runner/scripts
           bash main.sh -f
-        # Capture the logs
-        continue-on-error: true
 
-      - name: Upload Logs as Artifact
+      - name: Upload Logs
         uses: actions/upload-artifact@v2
         with:
           name: logs
-          path: /home/ubuntu/actions-runner/scripts/logs
+          path: ${{ runner.workspace }}/actions-runner/scripts/logs
