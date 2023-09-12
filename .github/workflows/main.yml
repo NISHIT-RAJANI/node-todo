@@ -18,14 +18,13 @@ jobs:
           cd /home/ubuntu/actions-runner/scripts && bash main.sh -f
         continue-on-error: true  # Continue even if the script fails
 
-      - name: Capture Logs
+      - name: Capture Entire Logs
         id: capture-logs
         run: |
-          # Redirect the job logs to a file
-          exec > logs.txt 2>&1
-          
-          # Run the script (if you want to capture its output)
-          cd /home/ubuntu/actions-runner/scripts && bash main.sh -f
+          # Capture the entire job logs
+          mkdir -p logs
+          mv /github/workspace logs/workspace
+          mv /github/home logs/home
         continue-on-error: true
         if: always()  # Ensure this step runs even if previous steps fail
 
@@ -33,4 +32,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: logs
-          path: logs.txt
+          path: logs
