@@ -3,24 +3,24 @@ name: Todo Node12 CICD
 on:
   push:
     branches:
-      - master
+        - master
 
 jobs:
   run_script:
-    runs-on: 
-      - self-hosted
-      - Linux
-      - X64
-
-
+    runs-on: ['self-hosted','Linux','X64']
+        
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Run a Script
+        run: cd /home/ubuntu/actions-runner/scripts && bash main.sh -f
+
+      
 
       - name: Run a Script
         run: |
           # Modify this to execute your specific script or commands
           cd /home/ubuntu/actions-runner/scripts && bash main.sh -f
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Capture Log Screenshot
         uses: wei/capture-action-logs@v1
