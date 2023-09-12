@@ -8,20 +8,34 @@ on:
 jobs:
   run_script:
     runs-on: ['self-hosted','Linux','X64']
+
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Create Log Directory
-        run: mkdir -p ${{ runner.workspace }}/logs
+      - name: Set up Xvfb
+        run: |
+          sudo apt-get update
+          sudo apt-get install xvfb -y
+          sudo apt-get install x11-xserver-utils -y
+          sudo Xvfb :99 -ac -screen 0 1280x1024x16 &
+          export DISPLAY=:99
 
       - name: Run a Script
         run: |
           cd /home/ubuntu/actions-runner/scripts
-          bash main.sh -f | tee ${{ runner.workspace }}/logs/workflow.log
+          bash main.sh -f
 
-      - name: Upload Logs
+      - name: Capture Job Logs Screenshots
+        run: |
+          mkdir -p artifacts/screenshots
+          jobs=$(jobs -p)
+          for job in $jobs; do
+            xwd -root -silent -display $DISPLAY | xwdtopnm | pnmtopng > artifacts/screenshots/job_$job.png
+          done
+
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: logs
-          path: ${{ runner.workspace }}/logs
+          name: screenshots
+          path: artifacts/screenshots
