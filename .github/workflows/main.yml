@@ -7,10 +7,10 @@ on:
 
 jobs:
   run_script:
-    runs-on: ['self-hosted', 'Linux', 'X64']
+    runs-on: ['self-hosted','Linux','X64']
 
     steps:
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Run a Script
@@ -20,13 +20,20 @@ jobs:
         continue-on-error: true
 
       - name: Capture Screenshots
-        uses: krtkush/screenshot-action@v2
-        with:
-          path: /home/ubuntu/actions-runner/scripts  # Adjust this path to match where your actions logs are generated
-          filename: screenshots.zip
+        if: ${{ always() }}
+        run: |
+          # Replace this command with a screenshot capture command suitable for your OS.
+          # Example for Linux:
+          sudo apt-get update
+          sudo apt-get install -y firefox xvfb
+          xvfb-run --server-args="-screen 0 1024x768x24" firefox &
+          sleep 5
+          firefox --screenshot /path/to/screenshot.png
+        continue-on-error: true
 
-      - name: Upload Logs
+      - name: Upload Artifacts
+        if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
-          name: logs-artifact
-          path: /home/ubuntu/actions-runner/scripts  # Adjust this path to match where your actions logs are generated
+          name: screenshots
+          path: /path/to/screenshot.png
