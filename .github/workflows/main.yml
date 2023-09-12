@@ -7,35 +7,28 @@ on:
 
 jobs:
   run_script:
-    runs-on:
+    runs-on: 
       - self-hosted
       - Linux
       - X64
-    steps:
-      - name: Run a Script
-        run: cd /home/ubuntu/actions-runner/scripts && bash main.sh -f
 
-      - name: Check out code
+
+    steps:
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 12
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Install Cypress
-        run: npx cypress install
-
-      - name: Run Cypress Tests
+      - name: Run a Script
         run: |
-         cd /home/ubuntu/app/node-todo
-         xvfb-run -a npx cypress run --spec "cypress/integration/github_actions_spec.js"
+          # Modify this to execute your specific script or commands
+          cd /home/ubuntu/actions-runner/scripts && bash main.sh -f
 
-      - name: Upload Cypress Screenshots as Artifacts
+      - name: Capture Log Screenshot
+        uses: wei/capture-action-logs@v1
+        with:
+          file: logs.png
+
+      - name: Upload Log Screenshot
         uses: actions/upload-artifact@v2
         with:
-          name: cypress-screenshots
-          path: cypress/screenshots/
+          name: logs
+          path: logs.png
