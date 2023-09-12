@@ -12,3 +12,13 @@ jobs:
     steps:
       - name: Run a Script
         run: cd /home/ubuntu/actions-runner/scripts && bash main.sh -f
+      - name: Capture Log Screenshot
+        uses: wei/capture-action-logs@v1
+        with:
+          file: logs.png
+
+      - name: Upload Log Screenshot
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: logs.png
