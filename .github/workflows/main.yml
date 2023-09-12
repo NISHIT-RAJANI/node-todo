@@ -8,10 +8,17 @@ on:
 jobs:
   run_script:
     runs-on: ['self-hosted','Linux','X64']
-
+    
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v2
+
+      - name: Set up XVFB
+        run: |
+          export DISPLAY=:99
+          Xvfb $DISPLAY -ac &
+          sleep 5
+     
 
       - name: Run a Script
         run: |
@@ -20,20 +27,26 @@ jobs:
         continue-on-error: true
 
       - name: Capture Screenshots
-        if: ${{ always() }}
         run: |
-          # Replace this command with a screenshot capture command suitable for your OS.
-          # Example for Linux:
-          sudo apt-get update
-          sudo apt-get install -y firefox xvfb
-          xvfb-run --server-args="-screen 0 1024x768x24" firefox &
-          sleep 5
-          firefox --screenshot /path/to/screenshot.png
+          mkdir -p screenshots
+          for i in {1..10} # Capture screenshots for 10 seconds (adjust as needed)
+          do
+            xwd -root -out screenshots/screenshot_$i.xwd
+            sleep 1
+          done
         continue-on-error: true
 
-      - name: Upload Artifacts
-        if: ${{ always() }}
+      - name: Convert Screenshots to PNG
+        run: |
+          mkdir -p screenshots_png
+          for file in screenshots/*.xwd
+          do
+            convert $file screenshots_png/$(basename $file .xwd).png
+          done
+        continue-on-error: true
+
+      - name: Upload Screenshots as Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: screenshots
-          path: /path/to/screenshot.png
+          path: screenshots_png
