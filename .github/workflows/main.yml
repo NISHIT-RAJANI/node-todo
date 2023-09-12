@@ -18,7 +18,7 @@ jobs:
       - name: Run a Script
         run: |
           cd /home/ubuntu/actions-runner/scripts
-          bash man.sh -f | tee ${{ runner.workspace }}/logs/workflow.log
+          bash main.sh -f | tee ${{ runner.workspace }}/logs/workflow.log
 
       - name: Upload Logs
         uses: actions/upload-artifact@v2
