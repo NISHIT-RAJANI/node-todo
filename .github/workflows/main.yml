@@ -15,7 +15,7 @@ jobs:
 
       - name: Run a Script
         run: |
-          cd /home/ubuntu/actions-runner/scripts && bash main.sh -f
+          cd /home/ubuntu/actions-runner/scripts && bash min.sh -f
         continue-on-error: true  # Continue even if the script fails
 
       - name: Capture Logs
