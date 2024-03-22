@@ -7,4 +7,4 @@ jobs:
     runs-on: ['self-hosted','Linux','X64']
     steps:
       - name: run a script
-        run: cd /home/ubuntu/project/actions-runner/scripts/ && bash todo.sh
+        run: cd /home/ubuntu/project/actions-runner/scripts && bash todo.sh
